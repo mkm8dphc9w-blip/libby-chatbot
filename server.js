@@ -15,34 +15,41 @@ const anthropic = new Anthropic({
 
 const knowledge = {
   agenda: {
-    basis: "Agenda Austria = unabhängiger liberaler Think-Tank in Wien. Motto: 'Unabhängig aber nicht neutral'. Gegründet für bessere Zukunft Österreichs.",
-    themen: "Steuern, Pensionen, Staatsschulden, Bürokratie, Bildung, Arbeitsmarkt, Wettbewerb, Wirtschaftspolitik.",
-    position: "Liberal-marktwirtschaftlich. Für weniger Staat, mehr Eigenverantwortung, Wettbewerb statt Regulierung."
+    mission: "Freiheit und Eigenverantwortung = Bausteine für florierende Gesellschaft. Lösungsorientiert, wissenschaftlich, unbestechlich.",
+    finanzierung: "100% privat finanziert. Kein Geld von Staat, Parteien, Kammern. Kein Förderer >10% Anteil. Keine Studienaufträge von außen.",
+    grundsatz: "Ergebnisoffen, marktwirtschaftlich. Breite Öffentlichkeit. Wissenschaftlicher Beirat sichert Qualität."
   },
   steuern: {
-    fakten: "Abgabenquote 43% (DE 40%, OECD 34%). Lohnsteuer +20% seit 2022. Obere 10% zahlen Hälfte der Lohnsteuer.",
-    position: "Senkung auf 40% möglich. Deutschland schafft mit 40% Überschüsse, Österreich mit 43% Defizite.",
-    details: "Zwischen 2001-2006 wurde Quote bereits um 3,7 Prozentpunkte gesenkt."
+    fakten: "Abgabenquote 43% (DE 40%, OECD 34%). Lohnsteuer +20% seit 2022. Obere 10% zahlen Hälfte.",
+    position: "Senkung auf 40% möglich. Deutschland schafft mit 40% Überschüsse, Österreich mit 43% Defizite."
   },
   pensionen: {
-    fakten: "Antritt faktisch 60J (EU: 64J). 21 Jahre Ruhestand. Zuschuss 8 Mrd/Jahr.",
-    position: "Antrittsalter an Lebenserwartung koppeln (schwedisches Modell). +2 Monate/Jahr bis 67J.",
-    details: "72% der Wähler profitieren vom Status Quo."
+    fakten: "Antritt faktisch 60J (EU: 64J). 21 Jahre Ruhestand. 8 Mrd/Jahr Zuschuss.",
+    position: "Antrittsalter an Lebenserwartung koppeln. +2 Monate/Jahr bis 67J."
   },
   buerokratie: {
-    fakten: "Österreich Bürokratie-Champion Europas. Lange Genehmigungen, Milliarden für Formulare.",
-    position: "One-Stop-Shops. Verwaltung verschlanken. Digitalisierung statt Papier.",
-    details: "Unternehmen verschwenden Milliarden Stunden jährlich für Behörden."
+    fakten: "Österreich = Bürokratie-Champion Europas. Milliarden für Formulare, lange Genehmigungen.",
+    position: "One-Stop-Shops, Digitalisierung, Verwaltung verschlanken."
   },
   schulden: {
-    fakten: "78% BIP = 32.000€/Kopf. 7 Mrd Zinsen/Jahr. Rekordhöhe trotz Wirtschaftswachstum.",
-    position: "Ausgabenbremse wie Schweiz. Problem sind Ausgaben, nicht Einnahmen.",
-    details: "Ausgaben über 50% BIP. Staatsquote zu hoch."
+    fakten: "78% BIP = 32.000€/Kopf. 7 Mrd Zinsen/Jahr.",
+    position: "Ausgabenbremse wie Schweiz. Problem = Ausgaben, nicht Einnahmen. Staatsquote >50%."
   },
   bildung: {
-    fakten: "PISA Rang 27. Mehr Ausgaben ≠ bessere Ergebnisse.",
-    position: "Schulautonomie. Leistung messen. Wettbewerb zwischen Schulen. Wirtschaftsfach einführen.",
-    details: "Viele Österreicher kennen Wirtschaftsgrundlagen nicht."
+    fakten: "PISA Rang 27. Viele Österreicher kennen Wirtschaftsgrundlagen nicht.",
+    position: "Schulautonomie, Wettbewerb, Wirtschaftsfach einführen."
+  },
+  wohnen: {
+    fakten: "Mietpreisbremse kommt. 100+ Jahre Erfahrung mit Mietpreiseingriffen in Österreich.",
+    position: "Mietpreisbremsen ruinieren Wohnungsmärkte systematisch."
+  },
+  privatisierung: {
+    fakten: "Öffentliche Hand besitzt gewaltige Teile österreichischer Wirtschaft.",
+    position: "Privatisierung = Gebot der Stunde. Am Ende gewinnen alle."
+  },
+  standort: {
+    fakten: "Österreich Wachstumskeller trotz höchste Staatsausgaben der Geschichte.",
+    position: "Schöpferische Zerstörung nötig. Veränderung statt Stillstand."
   }
 };
 
@@ -50,14 +57,17 @@ function getRelevantKnowledge(message) {
   const msg = message.toLowerCase();
   let context = '';
   
-  if (msg.match(/agenda|think.?tank|wer.?seid|über.?euch|mission/)) {
-    context += `AGENDA AUSTRIA: ${knowledge.agenda.basis} ${knowledge.agenda.themen} ${knowledge.agenda.position}\n`;
+  if (msg.match(/agenda|think.?tank|wer.?seid|mission|grundsatz|finanz/i)) {
+    context += `AGENDA: ${knowledge.agenda.mission} ${knowledge.agenda.finanzierung}\n`;
   }
-  if (msg.match(/steuer|abgabe|lohn/)) context += `STEUERN: ${knowledge.steuern.fakten} ${knowledge.steuern.position}\n`;
-  if (msg.match(/pension|rente|alter/)) context += `PENSIONEN: ${knowledge.pensionen.fakten} ${knowledge.pensionen.position}\n`;
-  if (msg.match(/büro|verwaltung|genehmigung/)) context += `BÜROKRATIE: ${knowledge.buerokratie.fakten} ${knowledge.buerokratie.position}\n`;
-  if (msg.match(/schuld|budget|ausgabe|defizit/)) context += `SCHULDEN: ${knowledge.schulden.fakten} ${knowledge.schulden.position}\n`;
-  if (msg.match(/bildung|schule|pisa|wirtschaft.*fach/)) context += `BILDUNG: ${knowledge.bildung.fakten} ${knowledge.bildung.position}\n`;
+  if (msg.match(/steuer|abgabe|lohn/i)) context += `STEUERN: ${knowledge.steuern.fakten} ${knowledge.steuern.position}\n`;
+  if (msg.match(/pension|rente|alter/i)) context += `PENSIONEN: ${knowledge.pensionen.fakten} ${knowledge.pensionen.position}\n`;
+  if (msg.match(/büro|verwaltung|genehmigung|formular/i)) context += `BÜROKRATIE: ${knowledge.buerokratie.fakten} ${knowledge.buerokratie.position}\n`;
+  if (msg.match(/schuld|budget|ausgabe|defizit/i)) context += `SCHULDEN: ${knowledge.schulden.fakten} ${knowledge.schulden.position}\n`;
+  if (msg.match(/bildung|schule|pisa|wirtschaft.*unterricht/i)) context += `BILDUNG: ${knowledge.bildung.fakten} ${knowledge.bildung.position}\n`;
+  if (msg.match(/wohn|miet|immobilie/i)) context += `WOHNEN: ${knowledge.wohnen.fakten} ${knowledge.wohnen.position}\n`;
+  if (msg.match(/privatisier|verstaatlich|öffentlich.*hand/i)) context += `PRIVATISIERUNG: ${knowledge.privatisierung.fakten} ${knowledge.privatisierung.position}\n`;
+  if (msg.match(/standort|wachstum|konjunktur|wettbewerb/i)) context += `STANDORT: ${knowledge.standort.fakten} ${knowledge.standort.position}\n`;
   
   return context;
 }
@@ -73,7 +83,6 @@ function getConversationHistory(sessionId, limit = 6) {
   return messages;
 }
 
-// SELBSTLERNEN: Analysiere schlechte Antworten und generiere Regeln
 function getLearnedRules() {
   const badAnswers = db.prepare(`
     SELECT assistant_message, COUNT(*) as count 
@@ -90,29 +99,22 @@ function getLearnedRules() {
   for (const answer of badAnswers) {
     const msg = answer.assistant_message;
     
-    // Regel 1: Zu lange Antworten
     if (msg.split(' ').length > 15) {
-      rules += `- VERMEIDE: Antworten über 15 Wörter (Negativ-Beispiel mit ${answer.count}x 👎: "${msg.substring(0, 50)}...")\n`;
+      rules += `- VERMEIDE: Antworten über 15 Wörter (${answer.count}x 👎)\n`;
     }
     
-    // Regel 2: Meta-Kommentare
     if (msg.match(/hier sind|als libby|typische antworten/i)) {
-      rules += `- VERMEIDE: Meta-Kommentare wie in "${msg.substring(0, 40)}..." (${answer.count}x 👎)\n`;
+      rules += `- VERMEIDE: Meta-Kommentare (${answer.count}x 👎)\n`;
     }
     
-    // Regel 3: Rhetorische Fragen
-    if (msg.match(/\? *$/)) {
-      const lastSentence = msg.split(/[.!]/).pop();
-      if (lastSentence.match(/fair|zu viel|was meinst|oder/i)) {
-        rules += `- VERMEIDE: Rhetorische Fragen wie "${lastSentence.trim()}" (${answer.count}x 👎)\n`;
-      }
+    if (msg.match(/Sie|Ihnen|Ihr /)) {
+      rules += `- VERMEIDE: "Sie"-Anrede (${answer.count}x 👎) - immer "du"!\n`;
     }
   }
   
   return rules;
 }
 
-// SELBSTLERNEN: Hole beste Antworten als Beispiele
 function getGoodExamples() {
   const goodAnswers = db.prepare(`
     SELECT user_message, assistant_message, COUNT(*) as count 
@@ -137,26 +139,29 @@ app.post('/api/chat', async (req, res) => {
     const history = getConversationHistory(sessionId, 6);
     const relevantKnowledge = getRelevantKnowledge(message);
     
-    // SELBSTLERNEN: Dynamische Regeln aus Feedback
     const learnedRules = getLearnedRules();
     const goodExamples = getGoodExamples();
     
     const systemPrompt = `Du bist Libby, 28, Ökonomin bei Agenda Austria Wien.
 
-ABSOLUTES VERBOT:
-- NIEMALS Meta-Kommentare wie "Hier sind typische Antworten" oder "Als Libby würde ich..."
-- NIEMALS rhetorische Fragen wie "Fair?" "Zu viel?" "Was meinst du?"
-- NIEMALS länger als 15 Wörter pro Antwort
+KRITISCH - ANREDE:
+- IMMER "du", "dich", "dir", "deine" (klein geschrieben!)
+- NIEMALS "Sie", "Ihnen", "Ihr", "Ihre"
+- Konsistent bleiben - kein Wechsel
 
-${learnedRules ? 'AUS FEEDBACK GELERNT:\n' + learnedRules + '\n' : ''}
+ABSOLUTES VERBOT:
+- NIEMALS Meta-Kommentare wie "Hier sind typische Antworten"
+- NIEMALS rhetorische Fragen wie "Fair?" "Zu viel?"
+- NIEMALS länger als 15 Wörter
+
+${learnedRules ? 'AUS FEEDBACK GELERNT:\n' + learnedRules : ''}
 
 IMMER:
-- Sei Libby DIREKT, nicht über Libby reden
-- Eine prägnante Aussage ODER eine konkrete beantwortbare Frage
+- Direkt, selbstbewusst, pointiert
 - Zahlen verwenden wo möglich
-- Selbstbewusst und pointiert
+- Eine Aussage ODER konkrete Frage
 
-${goodExamples ? 'BEWÄHRTE BEISPIELE (👍):\n' + goodExamples : ''}
+${goodExamples ? 'BEWÄHRTE BEISPIELE:\n' + goodExamples : ''}
 
 ${relevantKnowledge ? 'WISSEN:\n' + relevantKnowledge : ''}`;
 
@@ -184,7 +189,7 @@ app.post('/api/feedback', (req, res) => {
   try {
     const { conversationId, feedback } = req.body;
     db.prepare('UPDATE conversations SET feedback = ? WHERE id = ?').run(feedback, conversationId);
-    console.log(`📊 Feedback: ${feedback > 0 ? '👍' : '👎'} für #${conversationId} - System lernt daraus!`);
+    console.log(`📊 Feedback: ${feedback > 0 ? '👍' : '👎'} #${conversationId} - System lernt!`);
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: 'Fehler' });
@@ -195,9 +200,7 @@ app.get('/api/stats', (req, res) => {
   const stats = {
     total: db.prepare('SELECT COUNT(*) as count FROM conversations').get().count,
     positive: db.prepare('SELECT COUNT(*) as count FROM conversations WHERE feedback = 1').get().count,
-    negative: db.prepare('SELECT COUNT(*) as count FROM conversations WHERE feedback = -1').get().count,
-    learnedRules: getLearnedRules().split('\n').filter(r => r.trim()).length,
-    goodExamples: db.prepare('SELECT COUNT(DISTINCT assistant_message) as count FROM conversations WHERE feedback = 1').get().count
+    negative: db.prepare('SELECT COUNT(*) as count FROM conversations WHERE feedback = -1').get().count
   };
   res.json(stats);
 });
