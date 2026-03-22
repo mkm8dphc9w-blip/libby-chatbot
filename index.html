@@ -8,21 +8,23 @@
 * { box-sizing:border-box; }
 body { margin:0; padding:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:#f5f5f5; height:100vh; overflow:hidden; }
 .container { max-width:700px; margin:0 auto; background:white; height:100vh; display:flex; flex-direction:column; }
-h1 { color:#0066cc; margin:0; padding:20px 20px 5px 20px; font-size:32px; font-weight:bold; flex-shrink:0; line-height:1.2; }
-.subtitle { color:#0066cc; font-size:19px; font-weight:bold; padding:0 20px 15px 20px; border-bottom:1px solid #eee; margin:0; flex-shrink:0; }
+h1 { color:#0066cc; margin:0; padding:20px 20px 5px 20px; font-size:32px; font-weight:bold; flex-shrink:0; line-height:1.2; text-align:center; }
+.subtitle { color:#666; font-size:13px; font-weight:normal; padding:0 20px 15px 20px; border-bottom:1px solid #eee; margin:0; flex-shrink:0; text-align:center; font-style:italic; }
 #chat { flex:1; padding:15px; overflow-y:auto; -webkit-overflow-scrolling:touch; }
-.msg-wrapper { margin:15px 0; clear:both; }
-.msg-wrapper.user { text-align:right; }
-.msg { padding:10px 14px; border-radius:18px; display:inline-block; max-width:85%; word-wrap:break-word; font-size:15px; line-height:1.4; }
-.bot { background:#f0f0f0; color:#333; border-radius:18px 18px 18px 4px; }
-.user { background:#0066cc; color:white; border-radius:18px 18px 4px 18px; }
-.feedback-container { margin-top:8px; font-size:13px; color:#666; display:flex; align-items:center; gap:6px; }
+.msg-wrapper { margin:15px 0; display:flex; flex-direction:column; }
+.msg-wrapper.bot { align-items:flex-start; }
+.msg-wrapper.user { align-items:flex-end; }
+.msg { padding:10px 14px; border-radius:18px; max-width:75%; word-wrap:break-word; font-size:15px; line-height:1.4; }
+.msg.bot { background:#e9e9eb; color:#000; border-radius:18px 18px 18px 4px; }
+.msg.user { background:#0066cc; color:white; border-radius:18px 18px 4px 18px; }
+.feedback-container { margin-top:8px; font-size:13px; color:#666; display:flex; align-items:center; gap:6px; align-self:flex-start; }
 .feedback-container button { background:transparent; border:none; width:28px; height:28px; font-size:18px; cursor:pointer; transition:all 0.2s; border-radius:50%; padding:0; }
 .feedback-container button:hover { transform:scale(1.15); background:#f5f5f5; }
 .feedback-container button.active-good { background:#22c55e; transform:scale(1.1); }
 .feedback-container button.active-bad { background:#ef4444; transform:scale(1.1); }
 .feedback-container button:disabled { opacity:0.3; cursor:not-allowed; }
-.typing { padding:10px 14px; background:#f0f0f0; border-radius:18px; display:inline-block; }
+.typing-wrapper { display:flex; flex-direction:column; align-items:flex-start; }
+.typing { padding:10px 14px; background:#e9e9eb; border-radius:18px; display:inline-block; }
 .typing span { width:8px; height:8px; background:#999; border-radius:50%; display:inline-block; margin:0 3px; animation:bounce 1.4s infinite; }
 .typing span:nth-child(2) { animation-delay:0.2s; }
 .typing span:nth-child(3) { animation-delay:0.4s; }
@@ -36,8 +38,8 @@ button[type="submit"]:disabled { opacity:0.5; }
 
 @media (max-width:600px) {
   h1 { font-size:28px; padding:15px 15px 5px 15px; }
-  .subtitle { font-size:17px; padding:0 15px 12px 15px; }
-  .msg { font-size:14px; max-width:90%; }
+  .subtitle { font-size:11px; padding:0 15px 12px 15px; }
+  .msg { font-size:14px; max-width:85%; }
   .feedback-container { font-size:12px; }
   form { padding:10px; gap:6px; }
   input { padding:10px 14px; font-size:16px; }
@@ -47,8 +49,8 @@ button[type="submit"]:disabled { opacity:0.5; }
 </head>
 <body>
 <div class="container">
-  <h1>Frag' Libby</h1>
-  <p class="subtitle">Unabhängig aber nicht neutral</p>
+  <h1>🧿 Frag' Libby 💙</h1>
+  <p class="subtitle">(Warnung: Ich bin unabhängig, aber nicht neutral!)</p>
   <div id="chat"></div>
   <form onsubmit="send(event)">
     <input type="text" id="msg" placeholder="Deine Frage..." autocomplete="off" autofocus required>
@@ -60,7 +62,8 @@ const chat=document.getElementById('chat'),msg=document.getElementById('msg'),bt
 
 function add(text,isUser,conversationId){
   const wrapper=document.createElement('div');
-  wrapper.className='msg-wrapper'+(isUser?' user':'');
+  wrapper.className='msg-wrapper '+(isUser?'user':'bot');
+  
   const p=document.createElement('div');
   p.className='msg '+(isUser?'user':'bot');
   p.textContent=text;
@@ -80,7 +83,7 @@ function add(text,isUser,conversationId){
 function showTyping(){
   const wrapper=document.createElement('div');
   wrapper.id='typing-indicator';
-  wrapper.className='msg-wrapper';
+  wrapper.className='typing-wrapper';
   wrapper.innerHTML='<div class="typing"><span></span><span></span><span></span></div>';
   chat.appendChild(wrapper);
   chat.scrollTop=chat.scrollHeight;
