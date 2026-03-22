@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Libby</title>
+</head>
+<body style="font-family: sans-serif; padding: 20px; background: #f5f5f5;">
+
+<div style="max-width: 800px; margin: 0 auto; background: white; border-radius: 8px; padding: 20px;">
+  <h1 style="color: #e20613;">Libby – Agenda Austria</h1>
+  <div id="messages" style="min-height: 400px; border: 1px solid #ddd; padding: 10px; margin: 20px 0; overflow-y: auto;"></div>
+  <div>
+    <input type="text" id="inp" style="width: 70%; padding: 10px; font-size: 16px;" placeholder="Frage...">
+    <button onclick="send()" style="padding: 10px 20px; font-size: 16px; background: #e20613; color: white; border: none; cursor: pointer;">Senden</button>
+  </div>
+</div>
+
+<script>
+function add(text, user) {
+  const d = document.createElement('div');
+  d.style.margin = '10px 0';
+  d.style.padding = '10px';
+  d.style.background = user ? '#e20613' : '#f0f0f0';
+  d.style.color = user ? 'white' : 'black';
+  d.style.borderRadius = '8px';
+  d.textContent = text;
+  document.getElementById('messages').appendChild(d);
+}
+
+async function send() {
+  const inp = document.getElementById('inp');
+  const text = inp.value.trim();
+  if (!text) return;
+  add(text, true);
+  inp.value = '';
+  try {
+    const res = await fetch('http://localhost:3000/api/chat', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({message: text})
+    });
+    const data = await res.json();
+    add(data.message, false);
+  } catch(e) {
+    add('Fehler: ' + e.message, false);
+  }
+}
+
+document.getElementById('inp').onkeypress = (e) => e.key === 'Enter' && send();
+add('Hi! Ich bin Libby. Worüber möchtest du sprechen?', false);
+document.getElementById('inp').focus();
+</script>
+
+</body>
+</html>

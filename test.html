@@ -1,0 +1,20 @@
+<html>
+<body>
+<h1>Libby – Agenda Austria</h1>
+<input type="text" id="i" style="width:300px; padding:10px; font-size:18px;" placeholder="Frage...">
+<button onclick="s()" style="padding:10px; background:#e20613; color:white; border:none; cursor:pointer;">Senden</button>
+<div id="o"></div>
+<script>
+function s(){
+  var t=document.getElementById('i').value;
+  if(!t) return;
+  document.getElementById('o').innerHTML += '<p style="background:#e20613; color:white; padding:10px; border-radius:8px; margin:10px 0;">Du: '+t+'</p>';
+  document.getElementById('i').value='';
+  fetch('http://localhost:3000/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:t})})
+  .then(r=>r.json())
+  .then(d=>document.getElementById('o').innerHTML+='<p style="background:#f0f0f0; padding:10px; border-radius:8px; margin:10px 0;">Libby: '+d.message+'</p>');
+}
+document.getElementById('i').onkeypress = (e) => e.key === 'Enter' && s();
+</script>
+</body>
+</html>
